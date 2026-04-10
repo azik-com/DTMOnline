@@ -919,9 +919,20 @@ const KEY_ADMINS = 'dtm_admins_v5';
 // ═══════════════════════════════════════
 // ADMINS
 // ═══════════════════════════════════════
+
+const DEFAULT_ADMINS = [
+  {id:1, name:'Mastura', pw:'1908'},
+  {id:2, name:'Men',        pw:'0908'},
+];  
 function loadAdmins(){
-  try{ return JSON.parse(localStorage.getItem(KEY_ADMINS)||'[]'); }
-  catch(e){ return []; }
+  try{
+    const stored = JSON.parse(localStorage.getItem(KEY_ADMINS)||'[]');
+    // Default adminlarni birlashtir (id bo'yicha takrorlanmaslik uchun)
+    const ids = stored.map(a=>a.id);
+    const merged = [...stored];
+    DEFAULT_ADMINS.forEach(a=>{ if(!ids.includes(a.id)) merged.push(a); });
+    return merged;
+  }catch(e){ return DEFAULT_ADMINS; }
 }
 function saveAdmins(a){ localStorage.setItem(KEY_ADMINS, JSON.stringify(a)); }
 
